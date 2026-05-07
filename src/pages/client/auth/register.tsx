@@ -4,6 +4,7 @@ import type { FormProps } from 'antd';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './register.scss';
+import { loginAPI } from '@/services/api';
 
 type FieldType = {
     fullname?: string;
@@ -15,8 +16,11 @@ type FieldType = {
 const RegisterPage = () => {
     const [isSubmit, setIsSubmit] = useState(false);
 
-    const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
+    const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
         console.log('Success:', values);
+
+        const res = await loginAPI("admin@gmail.com", "123456");
+        console.log(res);
     };
 
     const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
