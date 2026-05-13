@@ -1,10 +1,10 @@
 import React from 'react';
-import { Button, Divider, Form, Input } from 'antd';
+import { Button, Divider, Form, Input, App } from 'antd';
 import type { FormProps } from 'antd';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './register.scss';
-import { loginAPI } from '@/services/api';
+import { loginAPI, registerAPI } from '@/services/api';
 
 type FieldType = {
     fullname?: string;
@@ -15,12 +15,21 @@ type FieldType = {
 
 const RegisterPage = () => {
     const [isSubmit, setIsSubmit] = useState(false);
+    const { message } = App.useApp();
+    const navigate = useNavigate();
 
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
-        console.log('Success:', values);
+        setIsSubmit(true);
+        const { fullname, email, password, phone } = values;
 
-        const res = await loginAPI("admin@gmail.com", "123456");
-        console.log(res);
+        const res = await registerAPI(fullname!, email!, password!, phone!);
+        if (res.data) {
+            message.success(res.message);
+            navigate('/login');
+        } else {
+            message.error(res.error || 'Đăng ký thất bại');
+        }
+        setIsSubmit(false);
     };
 
     const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
@@ -86,6 +95,9 @@ const RegisterPage = () => {
                                     Đăng ký
                                 </Button>
                             </Form.Item>
+
+                            <Divider>Or</Divider>
+                            <p className='text text-medium'>Bạn đã có tài khoản? <Link to="/login">Đăng nhập</Link></p>
                         </Form>
                     </section>
                 </div>
