@@ -4,7 +4,7 @@ import type { FormProps } from 'antd';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './register.scss';
-import { loginAPI, registerAPI } from '@/services/api';
+import { registerAPI } from '@/services/api';
 
 type FieldType = {
     fullname?: string;
