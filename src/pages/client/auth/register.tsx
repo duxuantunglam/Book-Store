@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button, Divider, Form, Input, App } from 'antd';
 import type { FormProps } from 'antd';
 import { useState } from 'react';
@@ -55,7 +54,7 @@ const RegisterPage = () => {
                                 labelCol={{ span: 24 }}
                                 label="Họ tên"
                                 name="fullname"
-                                rules={[{ required: true, message: 'Vui lòng nhập họ tên' }]}
+                                rules={[{ required: true, message: 'Vui lòng nhập họ tên!' }]}
                             >
                                 <Input />
                             </Form.Item>
@@ -65,8 +64,8 @@ const RegisterPage = () => {
                                 label="Email"
                                 name="email"
                                 rules={[
-                                    { required: true, message: 'Vui lòng nhập email' },
-                                    { type: 'email', message: 'Vui lòng nhập đúng định dạng email' }
+                                    { required: true, message: 'Vui lòng nhập email!' },
+                                    { type: 'email', message: 'Vui lòng nhập đúng định dạng email!' }
                                 ]}
                             >
                                 <Input />
@@ -76,7 +75,7 @@ const RegisterPage = () => {
                                 labelCol={{ span: 24 }}
                                 label="Mật khẩu"
                                 name="password"
-                                rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' }]}
+                                rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
                             >
                                 <Input.Password />
                             </Form.Item>
@@ -85,7 +84,7 @@ const RegisterPage = () => {
                                 labelCol={{ span: 24 }}
                                 label="Số điện thoại"
                                 name="phone"
-                                rules={[{ required: true, message: 'Vui lòng nhập số điện thoại' }]}
+                                rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}
                             >
                                 <Input />
                             </Form.Item>
