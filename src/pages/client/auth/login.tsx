@@ -18,22 +18,22 @@ const LoginPage = () => {
     const { setIsAuthenticated, setUser } = useCurrentApp();
 
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
-        setIsSubmit(true);
         const { username, password } = values;
+        setIsSubmit(true);
 
         const res = await loginAPI(username!, password!);
         setIsSubmit(false);
         if (res?.data) {
-            setIsAuthenticated?.(true);
-            setUser?.(res.data.user);
+            setIsAuthenticated(true);
+            setUser(res.data.user);
             localStorage.setItem('access_token', res.data.access_token);
-            message.success(res.message);
+            message.success("Đăng nhập thành công!");
             navigate('/');
         } else {
             notification.error({
                 message: "Có lỗi xảy ra",
                 description:
-                    res.message && Array.isArray(res.message) ? res.message[0] : res.message,
+                    res?.message && Array.isArray(res.message) ? res.message[0] : res?.message,
                 duration: 5,
             });
         }

@@ -21,7 +21,7 @@ export const fetchAccountAPI = () => {
     return axios.get<IBackendRes<IFetchAccount>>(urlBackend,
         {
             headers: {
-                delay: 3000
+                delay: 1000
             }
         }
     );

@@ -6,13 +6,14 @@ import { useCurrentApp } from "components/context/app.context";
 import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 
 function Layout() {
-  const { setUser, isAppLoading, setIsAppLoading } = useCurrentApp();
+  const { setUser, isAppLoading, setIsAppLoading, setIsAuthenticated } = useCurrentApp();
 
   useEffect(() => {
     const fetchAccount = async () => {
       const res = await fetchAccountAPI();
       if (res.data) {
         setUser(res.data.user);
+        setIsAuthenticated(true);
       }
       setIsAppLoading?.(false);
     }
