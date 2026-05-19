@@ -34,7 +34,16 @@ const columns: ProColumns<IUserTable>[] = [
     },
     {
         title: 'Created At',
-        dataIndex: 'createdAt'
+        dataIndex: 'createdAt',
+        valueType: 'date',
+        sorter: true,
+        hideInSearch: true
+    },
+    {
+        title: 'Created At',
+        dataIndex: 'createdAtRange',
+        valueType: 'dateRange',
+        hideInTable: true
     },
     {
         title: 'Action',
@@ -57,6 +66,13 @@ const columns: ProColumns<IUserTable>[] = [
     }
 ];
 
+type TSearch = {
+    fullName: string;
+    email: string;
+    createdAt: string;
+    createdAtRange: string
+}
+
 const TableUser = () => {
     const actionRef = useRef<ActionType>();
     const [meta, setMeta] = useState({
@@ -67,13 +83,29 @@ const TableUser = () => {
     });
     return (
         <>
-            <ProTable<IUserTable>
+            <ProTable<IUserTable, TSearch>
                 columns={columns}
                 actionRef={actionRef}
                 cardBordered
                 request={async (params, sort, filter) => {
                     console.log(params, sort, filter);
-                    const res = await getUsersAPI(params?.current ?? 1, params?.pageSize ?? 5);
+                    let query = "";
+                    if (params) {
+                        query += `current=${params.current}&pageSize=${params.pageSize}`;
+                        if (params.fullName) {
+                            query += `&fullName=/${params.fullName}/i`;
+                        }
+                        if (params.email) {
+                            query += `&email=/${params.email}/i`;
+                        }
+
+                        const createdDateRange = params.createdAtRange;
+                        if (createdDateRange) {
+                            query += `&createdAt>=${createdDateRange[0]}&createdAt<=${createdDateRange[1]}`;
+                        }
+                    }
+
+                    const res = await getUsersAPI(query);
                     if (res.data) {
                         setMeta(res.data.meta);
                     }
