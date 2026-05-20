@@ -17,6 +17,8 @@ const DetailUser = (props: IProps) => {
         setDataViewDetail(null);
     };
 
+    const avatarURL = `${import.meta.env.VITE_BACKEND_URL}/images/avatar/${dataViewDetail?.avatar}`;
+
     return (
         <>
             <Drawer
@@ -34,8 +36,11 @@ const DetailUser = (props: IProps) => {
                     <Descriptions.Item label="UserName">{dataViewDetail?.fullName}</Descriptions.Item>
                     <Descriptions.Item label="Email">{dataViewDetail?.email}</Descriptions.Item>
                     <Descriptions.Item label="Telephone">{dataViewDetail?.phone}</Descriptions.Item>
-                    <Descriptions.Item label="Role" span={2}>
+                    <Descriptions.Item label="Role">
                         <Badge status="processing" text={dataViewDetail?.role} />
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Avatar">
+                        <img src={avatarURL} alt="Avatar" style={{ width: 100, height: 100, objectFit: 'cover' }} />
                     </Descriptions.Item>
                     <Descriptions.Item label="Created At">
                         {dayjs(dataViewDetail?.createdAt).format(FORMATE_DATE)}
