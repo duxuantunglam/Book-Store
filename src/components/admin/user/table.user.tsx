@@ -5,6 +5,7 @@ import { ProTable, TableDropdown } from '@ant-design/pro-components';
 import { Button, Space, Tag } from 'antd';
 import { useRef, useState } from 'react';
 import DetailUser from './detail.user';
+import CreateUser from './create.user';
 
 type TSearch = {
     fullName: string;
@@ -24,6 +25,12 @@ const TableUser = () => {
 
     const [openViewDetail, setOpenViewDetail] = useState<boolean>(false);
     const [dataViewDetail, setDataViewDetail] = useState<IUserTable | null>(null);
+
+    const [openModalCreateUser, setOpenModalCreateUser] = useState<boolean>(false);
+
+    const refreshTable = () => {
+        actionRef.current?.reload();
+    };
 
     const columns: ProColumns<IUserTable>[] = [
         {
@@ -117,6 +124,8 @@ const TableUser = () => {
                             query += `&createdAt>=${createdDateRange[0]}&createdAt<=${createdDateRange[1]}`;
                         }
 
+                        query += `&sort=-createdAt`;    //default sort by createdAt desc
+
                         if (sort && sort.createdAt) {
                             query += `&sort=${sort.createdAt === 'ascend' ? 'createdAt' : '-createdAt'}`;
                         }
@@ -160,7 +169,7 @@ const TableUser = () => {
                         key="button"
                         icon={<PlusOutlined />}
                         onClick={() => {
-                            actionRef.current?.reload();
+                            setOpenModalCreateUser(true);
                         }}
                         type="primary"
                     >
@@ -169,11 +178,18 @@ const TableUser = () => {
 
                 ]}
             />
+
             <DetailUser
                 openViewDetail={openViewDetail}
                 setOpenViewDetail={setOpenViewDetail}
                 dataViewDetail={dataViewDetail}
                 setDataViewDetail={setDataViewDetail}
+            />
+
+            <CreateUser
+                openModalCreateUser={openModalCreateUser}
+                setOpenModalCreateUser={setOpenModalCreateUser}
+                refreshTable={refreshTable}
             />
         </>
     );
