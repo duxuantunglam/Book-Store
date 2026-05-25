@@ -126,11 +126,9 @@ const TableUser = () => {
                             query += `&createdAt>=${createdDateRange[0]}&createdAt<=${createdDateRange[1]}`;
                         }
 
-                        query += `&sort=-createdAt`;    //default sort by createdAt desc
-
                         if (sort && sort.createdAt) {
                             query += `&sort=${sort.createdAt === 'ascend' ? 'createdAt' : '-createdAt'}`;
-                        }
+                        } else query += `&sort=-createdAt`;
                     }
 
                     const res = await getUsersAPI(query);

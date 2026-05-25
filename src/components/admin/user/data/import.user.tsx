@@ -4,6 +4,7 @@ import { App, Modal, notification, Table, Upload } from 'antd';
 import { useState } from 'react';
 import Exceljs from 'exceljs';
 import { bulkCreateUsersAPI } from '@/services/api';
+import templateFile from '@/assets/template/users.xlsx?url';
 
 const { Dragger } = Upload;
 
@@ -134,8 +135,15 @@ const ImportUser = (props: IProps) => {
                     </p>
                     <p className="ant-upload-text">Click or drag file to this area to upload</p>
                     <p className="ant-upload-hint">
-                        Support for a single or bulk upload. Strictly prohibited from uploading company data or
-                        other banned files.
+                        Support for a single upload. Only accept .csv, .xlsx, .xls files. Please click the link below to download sample file format.
+                        <br />
+                        <a
+                            onClick={e => e.stopPropagation()}
+                            href={templateFile}
+                            download
+                        >
+                            Download Sample File
+                        </a>
                     </p>
                 </Dragger>
                 <div style={{ paddingTop: 20 }}>
