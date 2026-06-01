@@ -1,5 +1,6 @@
 import axios from 'services/axios.customize';
 
+// Auth:
 export const registerAPI = (fullName: string, email: string, password: string, phone: string) => {
     const urlBackend = "/api/v1/user/register";
     return axios.post<IBackendRes<IRegister>>(urlBackend, { fullName, email, password, phone });
@@ -60,4 +61,11 @@ export const updateUserAPI = (_id: string, fullName: string, phone: string) => {
 export const deleteUserAPI = (_id: string) => {
     const urlBackend = `/api/v1/user/${_id}`;
     return axios.delete<IBackendRes<IRegister>>(urlBackend);
+}
+
+
+// Book:
+export const getBooksAPI = (query: string) => {
+    const urlBackend = `/api/v1/book?${query}`;
+    return axios.get<IBackendRes<IModelPaginate<IBookTable>>>(urlBackend);
 }

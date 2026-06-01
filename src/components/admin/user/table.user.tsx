@@ -40,10 +40,6 @@ const TableUser = () => {
     const [isDeleteUser, setIsDeleteUser] = useState<boolean>(false);
     const { message, notification } = App.useApp();
 
-    const refreshTable = () => {
-        actionRef.current?.reload();
-    };
-
     const handleDeleteUser = async (_id: string) => {
         setIsDeleteUser(true);
         const res = await deleteUserAPI(_id);
@@ -57,6 +53,10 @@ const TableUser = () => {
             });
         }
         setIsDeleteUser(false);
+    };
+
+    const refreshTable = () => {
+        actionRef.current?.reload();
     };
 
     const columns: ProColumns<IUserTable>[] = [

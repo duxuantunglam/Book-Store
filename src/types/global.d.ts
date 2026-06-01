@@ -1,6 +1,7 @@
 export { };
 
 declare global {
+    // Auth:
     interface IBackendRes<T> {
         error?: string | string[];
         message: string;
@@ -65,5 +66,20 @@ declare global {
         countSuccess: number,
         countFailed: number,
         details: any,
+    }
+
+    // Book:
+    interface IBookTable {
+        _id: string,
+        thumbnail: string,
+        slider: string[],
+        mainText: string,
+        author: string,
+        price: number,
+        sold: number,
+        quantity: number,
+        category: string,
+        createdAt: Date,
+        updatedAt: Date,
     }
 }
