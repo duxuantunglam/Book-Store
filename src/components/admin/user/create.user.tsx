@@ -60,7 +60,7 @@ const CreateUser = (props: IProps) => {
 
                 <Form
                     form={form}
-                    name="basic"
+                    name="form-create-user"
                     style={{ maxWidth: 600 }}
                     onFinish={onFinish}
                     autoComplete="off"

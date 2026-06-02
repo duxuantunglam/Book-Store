@@ -7,6 +7,7 @@ import { useRef, useState } from 'react';
 import { CSVLink } from 'react-csv';
 import DetailBook from './detail.book';
 import { dateRangeValidate } from '@/services/helper';
+import CreateBook from './create.book';
 
 type TSearch = {
     mainText: string;
@@ -224,6 +225,7 @@ const TableBook = () => {
                         key="button"
                         icon={<PlusOutlined />}
                         type="primary"
+                        onClick={() => setOpenModalCreate(true)}
                     >
                         Add new
                     </Button>
@@ -236,6 +238,11 @@ const TableBook = () => {
                 setOpenViewDetail={setOpenViewDetail}
                 dataViewDetail={dataViewDetail}
                 setDataViewDetail={setDataViewDetail}
+            />
+
+            <CreateBook
+                openModalCreate={openModalCreate}
+                setOpenModalCreate={setOpenModalCreate}
             />
         </>
     );
