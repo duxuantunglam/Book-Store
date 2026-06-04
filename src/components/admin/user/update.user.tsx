@@ -87,7 +87,6 @@ const UpdateUser = (props: IProps) => {
                         labelCol={{ span: 24 }}
                         label="_id"
                         name="_id"
-                        rules={[{ required: true, message: 'Vui lòng nhập _id!' }]}
                     >
                         <Input disabled />
                     </Form.Item>

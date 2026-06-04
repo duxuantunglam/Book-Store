@@ -8,6 +8,7 @@ import { CSVLink } from 'react-csv';
 import DetailBook from './detail.book';
 import { dateRangeValidate } from '@/services/helper';
 import CreateBook from './create.book';
+import UpdateBook from './update.book';
 
 type TSearch = {
     mainText: string;
@@ -244,6 +245,14 @@ const TableBook = () => {
                 openModalCreate={openModalCreate}
                 setOpenModalCreate={setOpenModalCreate}
                 refreshTable={refreshTable}
+            />
+
+            <UpdateBook
+                openModalUpdate={openModalUpdate}
+                setOpenModalUpdate={setOpenModalUpdate}
+                refreshTable={refreshTable}
+                dataUpdate={dataUpdate}
+                setDataUpdate={setDataUpdate}
             />
         </>
     );
