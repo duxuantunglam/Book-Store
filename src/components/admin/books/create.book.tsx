@@ -1,10 +1,11 @@
-import { getCategoryAPI, uploadFileAPI } from '@/services/api';
+import { createBookAPI, getCategoryAPI, uploadFileAPI } from '@/services/api';
 import { MAX_UPLOAD_IMAGE_SIZE } from '@/services/helper';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { App, Col, Divider, Form, Input, InputNumber, Modal, Row, Select, Upload } from 'antd';
 import type { FormProps, GetProp, InputNumberProps, UploadFile, UploadProps } from 'antd';
 import { UploadChangeParam } from 'antd/es/upload';
 import { useEffect, useState } from 'react';
+import type { UploadRequestOption as RcCustomRequestOptions } from 'rc-upload/lib/interface';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
@@ -13,6 +14,7 @@ type UserUploadType = "thumbnail" | "slider";
 interface IProps {
     openModalCreate: boolean;
     setOpenModalCreate: (v: boolean) => void;
+    refreshTable: () => void;
 }
 
 type FieldType = {
@@ -26,7 +28,7 @@ type FieldType = {
 };
 
 const CreateBook = (props: IProps) => {
-    const { openModalCreate, setOpenModalCreate } = props;
+    const { openModalCreate, setOpenModalCreate, refreshTable } = props;
     const { message, notification } = App.useApp();
     const [form] = Form.useForm();
 
@@ -57,10 +59,32 @@ const CreateBook = (props: IProps) => {
     }, []);
 
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+        const { mainText, author, price, category, quantity } = values;
+        const thumbnail = fileListThumbnail[0]?.name || '';
+        const slider = fileListSlider.map((item) => item.name) || [];
         setIsSubmit(true);
-        console.log("values form: ", values, fileListThumbnail, fileListSlider);
-        console.log("values fileListThumbnail: ", fileListThumbnail);
-        console.log("values fileListSlider: ", fileListSlider);
+        const res = await createBookAPI(
+            mainText,
+            author,
+            price,
+            category,
+            quantity,
+            thumbnail,
+            slider
+        );
+        if (res && res.data) {
+            message.success("Tạo mới sách thành công!");
+            form.resetFields();
+            setFileListSlider([]);
+            setFileListThumbnail([]);
+            setOpenModalCreate(false);
+            refreshTable();
+        } else {
+            notification.error({
+                message: 'Có lỗi xảy ra!',
+                description: res.message
+            });
+        }
         setIsSubmit(false);
     };
 
