@@ -1,4 +1,4 @@
-import { getBooksAPI } from '@/services/api';
+import { deleteBookAPI, getBooksAPI } from '@/services/api';
 import { DeleteTwoTone, EditTwoTone, ExportOutlined, PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
@@ -40,21 +40,21 @@ const TableBook = () => {
     const [dataUpdate, setDataUpdate] = useState<IBookTable | null>(null);
 
     const [isDeleteBook, setIsDeleteBook] = useState<boolean>(false);
-    // const { message, notification } = App.useApp();
+    const { message, notification } = App.useApp();
 
     const handleDeleteBook = async (_id: string) => {
-        // setIsDeleteBook(true);
-        // const res = await deleteBookAPI(_id);
-        // if (res && res.data) {
-        //     message.success("Xoá sách thành công!");
-        //     refreshTable();
-        // } else {
-        //     notification.error({
-        //         message: 'Có lỗi xảy ra!',
-        //         description: res.message
-        //     });
-        // }
-        // setIsDeleteBook(false);
+        setIsDeleteBook(true);
+        const res = await deleteBookAPI(_id);
+        if (res && res.data) {
+            message.success("Xoá sách thành công!");
+            refreshTable();
+        } else {
+            notification.error({
+                message: 'Có lỗi xảy ra!',
+                description: res.message
+            });
+        }
+        setIsDeleteBook(false);
     };
 
     const refreshTable = () => {
@@ -211,16 +211,17 @@ const TableBook = () => {
                 }}
                 headerTitle="Table book"
                 toolBarRender={() => [
-                    <Button
-                        icon={<ExportOutlined />}
-                        type="primary"
-                    >
-                        <CSVLink
-                            data={[]}
-                            filename="export-books.csv">
+
+                    <CSVLink
+                        data={currentDataTable}
+                        filename="export-books.csv">
+                        <Button
+                            icon={<ExportOutlined />}
+                            type="primary"
+                        >
                             Export
-                        </CSVLink>
-                    </Button>,
+                        </Button>
+                    </CSVLink>,
 
                     <Button
                         key="button"
