@@ -60,7 +60,12 @@ export const updateUserAPI = (_id: string, fullName: string, phone: string) => {
 
 export const deleteUserAPI = (_id: string) => {
     const urlBackend = `/api/v1/user/${_id}`;
-    return axios.delete<IBackendRes<IRegister>>(urlBackend);
+    return axios.delete<IBackendRes<IRegister>>(urlBackend,
+        {
+            headers: {
+                delay: 3000
+            }
+        });
 }
 
 
