@@ -5,8 +5,11 @@ import { useEffect, useState } from "react";
 import 'styles/home.scss';
 
 type FieldType = {
-    mainText: string;
-    subText: string;
+    range: {
+        from: number;
+        to: number;
+    }
+    category: string[];
 };
 
 const HomePage = () => {
@@ -69,11 +72,26 @@ const HomePage = () => {
     }
 
     const handleChangeFilter = (changedValues: any, values: any) => {
-        console.log("check", changedValues, values);
+        if (changedValues.category) {
+            const category = values.category;
+            if (category && category.length > 0) {
+                const filterCategory = category.join(",");
+                setFilter(`category=${filterCategory}`);
+            } else {
+                setFilter("");
+            }
+        }
     }
 
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
-
+        if (values?.range?.from >= 0 && values?.range?.to >= 0) {
+            let filterPrice = `price>=${values?.range?.from}&price<=${values?.range?.to}`;
+            if (values?.category?.length) {
+                const category = values?.category?.join(",");
+                filterPrice += `&category=${category}`;
+            }
+            setFilter(filterPrice);
+        }
     };
 
     const onChange = (key: string) => {
@@ -82,22 +100,22 @@ const HomePage = () => {
 
     const items = [
         {
-            key: '1',
+            key: 'sort=-sold',
             label: `Phổ biến`,
             children: <></>,
         },
         {
-            key: '2',
+            key: 'sort=-updated_at',
             label: `Hàng mới`,
             children: <></>,
         },
         {
-            key: '3',
+            key: 'sort=price',
             label: `Giá thấp đến cao`,
             children: <></>,
         },
         {
-            key: '4',
+            key: 'sort=-price',
             label: `Giá cao đến thấp`,
             children: <></>,
         }
@@ -114,7 +132,12 @@ const HomePage = () => {
                                     <FilterTwoTone />
                                     <span style={{ fontWeight: '500' }}>Bộ lọc tìm kiếm</span>
                                 </span>
-                                <ReloadOutlined title="Reset" onClick={() => { form.resetFields() }} />
+                                <ReloadOutlined
+                                    title="Reset"
+                                    onClick={() => {
+                                        form.resetFields();
+                                        setFilter("");
+                                    }} />
                             </div>
                             <Divider />
 
@@ -152,6 +175,7 @@ const HomePage = () => {
                                                 min={0}
                                                 placeholder="từ"
                                                 formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                style={{ width: "100%" }}
                                             />
                                         </Form.Item>
                                         <p>-</p>
@@ -161,6 +185,7 @@ const HomePage = () => {
                                                 min={0}
                                                 placeholder="đến"
                                                 formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                style={{ width: "100%" }}
                                             />
                                         </Form.Item>
                                     </div>
@@ -209,9 +234,10 @@ const HomePage = () => {
                             <div style={{ padding: "20px", background: "#fff", borderRadius: 5, marginBottom: 20 }}>
                                 <Row>
                                     <Tabs
-                                        defaultActiveKey="1"
+                                        defaultActiveKey="sort=-sold"
                                         items={items}
-                                        onChange={onChange}
+                                        onChange={(value) => setSortQuery(value)}
+                                        style={{ overflowX: "auto" }}
                                     />
                                 </Row>
                                 <Row className='customize-row'>
