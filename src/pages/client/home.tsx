@@ -2,7 +2,8 @@ import { getBooksAPI, getCategoryAPI } from "@/services/api";
 import { FilterTwoTone, ReloadOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Col, Divider, Form, FormProps, InputNumber, Pagination, Rate, Row, Spin, Tabs } from "antd";
 import { useEffect, useState } from "react";
-import 'styles/home.scss';
+import { useNavigate } from "react-router-dom";
+import 'styles/book.scss';
 
 type FieldType = {
     range: {
@@ -13,6 +14,8 @@ type FieldType = {
 };
 
 const HomePage = () => {
+    const navigate = useNavigate();
+
     const [listCategory, setListCategory] = useState<{ label: string, value: string }[]>([]);
     const [listBook, setListBook] = useState<IBookTable[]>([]);
     const [current, setCurrent] = useState<number>(1);
@@ -243,7 +246,9 @@ const HomePage = () => {
                                 <Row className='customize-row'>
                                     {listBook.map((item, index) => {
                                         return (
-                                            <div className="column" key={`book-${index}`}>
+                                            <div
+                                                onClick={() => navigate(`/book/${item._id}`)}
+                                                className="column" key={`book-${index}`}>
                                                 <div className='wrapper'>
                                                     <div className='thumbnail'>
                                                         <img src={`${import.meta.env.VITE_BACKEND_URL}/images/book/${item.thumbnail}`} />
