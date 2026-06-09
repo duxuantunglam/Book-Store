@@ -5,6 +5,7 @@ import "styles/book.scss";
 import ModalGallery from "./modal.gallery";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import { BsCartPlus } from "react-icons/bs";
+import { useCurrentApp } from "@/components/context/app.context";
 
 interface IProps {
     currentBook: IBookTable | null;
@@ -24,10 +25,11 @@ const BookDetail = (props: IProps) => {
 
     const [isOpenModalGallery, setIsOpenModalGallery] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
-
     const [currentQuantity, setCurrentQuantity] = useState<number>(1);
 
     const refGallery = useRef<ImageGallery>(null);
+
+    const { carts, setCarts } = useCurrentApp();
 
     useEffect(() => {
         if (currentBook) {
@@ -77,6 +79,34 @@ const BookDetail = (props: IProps) => {
             }
         }
     };
+
+    const handleAddToCart = () => {
+        const cartStorage = localStorage.getItem("cart");
+        if (cartStorage && currentBook) {
+            const carts = JSON.parse(cartStorage) as ICart[];
+
+            let isExistIndex = carts.findIndex(cart => cart._id === currentBook?._id);
+            if (isExistIndex > -1) {
+                carts[isExistIndex].quantity += currentQuantity;
+            } else {
+                carts.push({
+                    quantity: currentQuantity,
+                    _id: currentBook._id,
+                    detail: currentBook
+                });
+            }
+        }
+        const data = [{
+            _id: currentBook?._id!,
+            quantity: currentQuantity,
+            detail: currentBook!
+        }];
+        localStorage.setItem("cart", JSON.stringify(data));
+
+        setCarts(data);
+    };
+
+    console.log(carts);
 
     return (
         <div className="view-detail-book" style={{ maxWidth: 1440, margin: "0 auto", padding: "0 20px" }}>
@@ -143,8 +173,8 @@ const BookDetail = (props: IProps) => {
                                 </span>
                             </div>
                             <div className='buy'>
-                                <button className='cart'>
-                                    <BsCartPlus />
+                                <button className='cart' onClick={handleAddToCart}>
+                                    <BsCartPlus className="icon-cart" />
                                     <span>Thêm vào giỏ hàng</span>
                                 </button>
                                 <button className='now'>Mua ngay</button>
@@ -163,6 +193,6 @@ const BookDetail = (props: IProps) => {
             />
         </div>
     )
-}
+};
 
 export default BookDetail;
