@@ -83,6 +83,7 @@ declare global {
         updatedAt: Date,
     }
 
+    // Cart:
     interface ICart {
         _id: string,
         quantity: number,

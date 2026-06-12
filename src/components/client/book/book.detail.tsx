@@ -1,4 +1,4 @@
-import { Col, Divider, Rate, Row } from "antd";
+import { App, Col, Divider, Rate, Row } from "antd";
 import { useEffect, useRef, useState } from "react";
 import ImageGallery from "react-image-gallery";
 import "styles/book.scss";
@@ -14,6 +14,8 @@ interface IProps {
 type UserAction = "MINUS" | "PLUS";
 
 const BookDetail = (props: IProps) => {
+    const { message } = App.useApp();
+
     const { currentBook } = props;
 
     const [imageGallery, setImageGallery] = useState<{
@@ -81,7 +83,7 @@ const BookDetail = (props: IProps) => {
     };
 
     const handleAddToCart = () => {
-        const cartStorage = localStorage.getItem("cart");
+        const cartStorage = localStorage.getItem("carts");
         if (cartStorage && currentBook) {
             const carts = JSON.parse(cartStorage) as ICart[];
 
@@ -95,15 +97,20 @@ const BookDetail = (props: IProps) => {
                     detail: currentBook
                 });
             }
-        }
-        const data = [{
-            _id: currentBook?._id!,
-            quantity: currentQuantity,
-            detail: currentBook!
-        }];
-        localStorage.setItem("cart", JSON.stringify(data));
+            localStorage.setItem("carts", JSON.stringify(carts));
 
-        setCarts(data);
+            setCarts(carts);
+            message.success("Thêm sản phẩm vào giỏ hàng thành công!");
+        } else {
+            const data = [{
+                _id: currentBook?._id!,
+                quantity: currentQuantity,
+                detail: currentBook!
+            }];
+            localStorage.setItem("carts", JSON.stringify(data));
+
+            setCarts(data);
+        }
     };
 
     console.log(carts);
@@ -173,7 +180,7 @@ const BookDetail = (props: IProps) => {
                                 </span>
                             </div>
                             <div className='buy'>
-                                <button className='cart' onClick={handleAddToCart}>
+                                <button className='cart' onClick={() => handleAddToCart()}>
                                     <BsCartPlus className="icon-cart" />
                                     <span>Thêm vào giỏ hàng</span>
                                 </button>
