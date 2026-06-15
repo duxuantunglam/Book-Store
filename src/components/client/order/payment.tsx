@@ -1,6 +1,7 @@
 import { useCurrentApp } from "@/components/context/app.context";
+import { createOrderAPI } from "@/services/api";
 import { DeleteTwoTone } from "@ant-design/icons";
-import { Col, Divider, Form, FormProps, Input, Radio, Row, Space } from "antd";
+import { App, Button, Col, Divider, Form, FormProps, Input, Radio, Row, Space } from "antd";
 import { useEffect, useState } from "react";
 
 const { TextArea } = Input;
@@ -25,6 +26,8 @@ const Payment = (props: IProps) => {
     const [form] = Form.useForm();
 
     const [isSubmit, setIsSubmit] = useState(false);
+    const { message, notification } = App.useApp();
+    const { setCurrentStep } = props;
 
     useEffect(() => {
         if (user) {
@@ -60,7 +63,29 @@ const Payment = (props: IProps) => {
     }
 
     const handlePlaceOrder: FormProps<FieldType>["onFinish"] = async (values) => {
-        console.log(values);
+        const { fullName, phone, address, method } = values;
+        const detail = carts.map(item => ({
+            _id: item._id,
+            quantity: item.quantity,
+            bookName: item.detail.mainText,
+        }));
+
+        setIsSubmit(true);
+        const res = await createOrderAPI(fullName, address, phone, totalPrice, method, detail);
+        if (res?.data) {
+            localStorage.removeItem("carts");
+            setCarts([]);
+            message.success("Đặt hàng thành công!");
+            setCurrentStep(2);
+        } else {
+            notification.error({
+                message: "Có lỗi xảy ra!",
+                description:
+                    res.message && Array.isArray(res.message) ? res.message[0] : "Đặt hàng thất bại, vui lòng thử lại sau!",
+                duration: 5
+            });
+        }
+        setIsSubmit(false);
     }
 
     return (
@@ -98,7 +123,7 @@ const Payment = (props: IProps) => {
                 <div>
                     <span
                         style={{ cursor: "pointer" }}
-                        onClick={() => props.setCurrentStep(0)}
+                        onClick={() => setCurrentStep(0)}
                     >
                         Quay lại
                     </span>
@@ -111,60 +136,68 @@ const Payment = (props: IProps) => {
                     onFinish={handlePlaceOrder}
                     autoComplete="off"
                     layout="vertical"
-                />
-                <div className='order-sum'>
-                    <Form.Item<FieldType>
-                        label="Hình thức thanh toán"
-                        name="method"
-                    >
-                        <Radio.Group>
-                            <Space direction="vertical">
-                                <Radio value={"COD"}>Thanh toán khi nhận hàng</Radio>
-                                <Radio value={"BANKING"}>Chuyển khoản ngân hàng</Radio>
-                            </Space>
-                        </Radio.Group>
-                    </Form.Item>
+                >
+                    <div className='order-sum'>
+                        <Form.Item<FieldType>
+                            label="Hình thức thanh toán"
+                            name="method"
+                        >
+                            <Radio.Group>
+                                <Space direction="vertical">
+                                    <Radio value={"COD"}>Thanh toán khi nhận hàng</Radio>
+                                    <Radio value={"BANKING"}>Chuyển khoản ngân hàng</Radio>
+                                </Space>
+                            </Radio.Group>
+                        </Form.Item>
 
-                    <Form.Item<FieldType>
-                        label="Họ và tên"
-                        name="fullName"
-                        rules={[{ required: true, message: "Vui lòng nhập họ và tên!" }]}
-                    >
-                        <Input placeholder="Nhập họ và tên" />
-                    </Form.Item>
+                        <Form.Item<FieldType>
+                            label="Họ và tên"
+                            name="fullName"
+                            rules={[{ required: true, message: "Vui lòng nhập họ và tên!" }]}
+                        >
+                            <Input placeholder="Nhập họ và tên" />
+                        </Form.Item>
 
-                    <Form.Item<FieldType>
-                        label="Số điện thoại"
-                        name="phone"
-                        rules={[{ required: true, message: "Vui lòng nhập số điện thoại!" }]}
-                    >
-                        <Input placeholder="Nhập số điện thoại" />
-                    </Form.Item>
+                        <Form.Item<FieldType>
+                            label="Số điện thoại"
+                            name="phone"
+                            rules={[{ required: true, message: "Vui lòng nhập số điện thoại!" }]}
+                        >
+                            <Input placeholder="Nhập số điện thoại" />
+                        </Form.Item>
 
-                    <Form.Item<FieldType>
-                        label="Địa chỉ nhận hàng"
-                        name="address"
-                        rules={[{ required: true, message: "Vui lòng nhập địa chỉ!" }]}
-                    >
-                        <TextArea placeholder="Nhập địa chỉ nhận hàng" rows={4} />
-                    </Form.Item>
+                        <Form.Item<FieldType>
+                            label="Địa chỉ nhận hàng"
+                            name="address"
+                            rules={[{ required: true, message: "Vui lòng nhập địa chỉ!" }]}
+                        >
+                            <TextArea placeholder="Nhập địa chỉ nhận hàng" rows={4} />
+                        </Form.Item>
 
-                    <div className='calculate'>
-                        <span> Tạm tính</span>
-                        <span>
-                            {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalPrice || 0)}
-                        </span>
+                        <div className='calculate'>
+                            <span> Tạm tính</span>
+                            <span>
+                                {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalPrice || 0)}
+                            </span>
+                        </div>
+                        <Divider style={{ margin: "10px 0" }} />
+                        <div className='calculate'>
+                            <span> Tổng tiền</span>
+                            <span className='sum-final'>
+                                {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalPrice || 0)}
+                            </span>
+                        </div>
+                        <Divider style={{ margin: "10px 0" }} />
+                        <Button
+                            color="danger"
+                            variant="solid"
+                            htmlType="submit"
+                            loading={isSubmit}
+                        >
+                            Đặt hàng ({carts?.length ?? 0})
+                        </Button>
                     </div>
-                    <Divider style={{ margin: "10px 0" }} />
-                    <div className='calculate'>
-                        <span> Tổng tiền</span>
-                        <span className='sum-final'>
-                            {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalPrice || 0)}
-                        </span>
-                    </div>
-                    <Divider style={{ margin: "10px 0" }} />
-                    <button type="submit">Đặt hàng ({carts?.length ?? 0})</button>
-                </div>
+                </Form>
             </Col>
         </Row>
     );
