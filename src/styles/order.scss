@@ -1,0 +1,140 @@
+.order-container {
+    padding: 0 20px;
+
+    .order-book {
+        background: #fff;
+        border-radius: 4px;
+        padding: 18px 20px;
+        margin-bottom: 16px;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .book-content {
+            flex: 1;
+
+            display: flex;
+            align-items: center;
+            gap: 20px;
+
+            img {
+                width: 60px;
+                height: 90px;
+                object-fit: contain;
+                flex-shrink: 0;
+            }
+
+            .title {
+                width: 280px;
+
+                font-size: 16px;
+                color: #333;
+                line-height: 1.5;
+
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+
+            .price {
+                min-width: 120px;
+
+                font-size: 18px;
+                color: #333;
+                font-weight: 500;
+            }
+        }
+
+        .action {
+            min-width: 420px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+
+            .quantity {
+                .ant-input-number {
+                    width: 72px;
+                }
+            }
+
+            .sum {
+                min-width: 150px;
+
+                font-size: 16px;
+                color: #444;
+            }
+        }
+    }
+
+    .order-sum {
+        background: #fff;
+        border-radius: 4px;
+        padding: 18px;
+
+        .calculate {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            span:first-child {
+                color: #555;
+                font-size: 15px;
+            }
+        }
+
+        .sum-final {
+            font-size: 34px;
+            font-weight: 500;
+            color: #f44336;
+        }
+
+        button {
+            width: 100%;
+            height: 46px;
+
+            border: none;
+            border-radius: 3px;
+
+            background: #f45137;
+            color: white;
+
+            font-size: 16px;
+            font-weight: 500;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+
+            &:hover {
+                background: #e7442b;
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .order-container {
+        .order-book {
+            flex-direction: column;
+            align-items: stretch;
+
+            .book-content {
+                margin-bottom: 16px;
+
+                .title {
+                    width: auto;
+                }
+            }
+
+            .action {
+                min-width: unset;
+                width: 100%;
+                flex-wrap: wrap;
+            }
+        }
+    }
+}
