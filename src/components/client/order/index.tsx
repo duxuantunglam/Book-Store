@@ -1,12 +1,19 @@
 import { useCurrentApp } from "@/components/context/app.context";
 import { DeleteTwoTone } from "@ant-design/icons";
-import { Col, Divider, InputNumber, Row } from "antd";
+import { App, Col, Divider, InputNumber, Row } from "antd";
 import { useEffect, useState } from "react";
 import "styles/order.scss";
 
-const OrderDetail = () => {
+interface IProps {
+    setCurrentStep: (v: number) => void;
+}
+
+const OrderDetail = (props: IProps) => {
+    const { setCurrentStep } = props;
     const { carts, setCarts } = useCurrentApp();
     const [totalPrice, setTotalPrice] = useState(0);
+
+    const { message } = App.useApp();
 
     useEffect(() => {
         if (carts && carts.length > 0) {
@@ -50,6 +57,14 @@ const OrderDetail = () => {
             setCarts(newCarts);
         }
     }
+
+    const handleNextStep = () => {
+        if (!carts.length) {
+            message.error("Không tồn tại sản phẩm trong giỏ hàng!");
+            return;
+        }
+        setCurrentStep(1);
+    };
 
     return (
         <div style={{ background: '#efefef', padding: "20px 0" }}>
@@ -105,7 +120,7 @@ const OrderDetail = () => {
                                 </span>
                             </div>
                             <Divider style={{ margin: "10px 0" }} />
-                            <button>Mua hàng ({carts?.length ?? 0})</button>
+                            <button onClick={handleNextStep}>Mua hàng ({carts?.length ?? 0})</button>
                         </div>
                     </Col>
                 </Row>
