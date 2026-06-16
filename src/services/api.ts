@@ -11,7 +11,7 @@ export const loginAPI = (username: string, password: string) => {
     return axios.post<IBackendRes<ILogin>>(urlBackend, { username, password },
         {
             headers: {
-                delay: 100
+                delay: 1000
             }
         }
     );
@@ -22,7 +22,7 @@ export const fetchAccountAPI = () => {
     return axios.get<IBackendRes<IFetchAccount>>(urlBackend,
         {
             headers: {
-                delay: 100
+                delay: 1000
             }
         }
     );
@@ -63,9 +63,19 @@ export const deleteUserAPI = (_id: string) => {
     return axios.delete<IBackendRes<IRegister>>(urlBackend,
         {
             headers: {
-                delay: 100
+                delay: 1000
             }
         });
+}
+
+export const updateUserInfoAPI = (_id: string, avatar: string, fullName: string, phone: string) => {
+    const urlBackend = `/api/v1/user`;
+    return axios.put<IBackendRes<IRegister>>(urlBackend, { fullName, phone, avatar, _id });
+}
+
+export const updateUserPasswordAPI = (email: string, oldpass: string, newpass: string) => {
+    const urlBackend = `/api/v1/user/change-password`;
+    return axios.post<IBackendRes<IRegister>>(urlBackend, { email, oldpass, newpass });
 }
 
 
@@ -160,6 +170,7 @@ export const getBookByIdAPI = (_id: string) => {
         }
     );
 }
+
 
 // Order:
 export const createOrderAPI = (

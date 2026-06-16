@@ -28,11 +28,11 @@ const HistoryPage = () => {
         },
         {
             title: 'Trạng thái',
-            render: (item, record, index) => {
+            render: (item, record, index) => (
                 <Tag color={"green"}>
                     Thành công!
                 </Tag>
-            }
+            )
         },
         {
             title: 'Chi tiết',
