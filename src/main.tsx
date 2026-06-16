@@ -10,6 +10,7 @@ import AboutPage from 'pages/client/about';
 import LoginPage from 'pages/client/auth/login';
 import RegisterPage from 'pages/client/auth/register';
 import OrderPage from './pages/client/order';
+import HistoryPage from './pages/client/history';
 import 'styles/global.scss'
 import HomePage from 'pages/client/home';
 import { App, ConfigProvider } from 'antd';
@@ -48,10 +49,10 @@ const router = createBrowserRouter([
         element: <AboutPage />,
       },
       {
-        path: "/checkout",
+        path: "/history",
         element: (
           <ProtectedRoute>
-            <div>checkout page</div>
+            <HistoryPage />
           </ProtectedRoute>
         ),
       }

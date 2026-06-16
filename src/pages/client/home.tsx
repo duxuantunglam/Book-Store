@@ -23,7 +23,7 @@ const HomePage = () => {
     const [pageSize, setPageSize] = useState<number>(5);
     const [total, setTotal] = useState<number>(0);
 
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [filter, setFilter] = useState<string>("");
     const [sortQuery, setSortQuery] = useState<string>("sort=-sold");
 
