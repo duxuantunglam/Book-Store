@@ -2,12 +2,12 @@ import { Modal, Tabs } from "antd";
 import ChangePassword from "./change.password";
 import UserInfo from "./user.info";
 
-interface Iprops {
+interface IProps {
     isModalOpen: boolean;
     setIsModalOpen: (v: boolean) => void;
 }
 
-const ManageAccount = (props: Iprops) => {
+const ManageAccount = (props: IProps) => {
     const { isModalOpen, setIsModalOpen } = props;
 
     const items = [
@@ -31,6 +31,7 @@ const ManageAccount = (props: Iprops) => {
             onCancel={() => setIsModalOpen(false)}
             maskClosable={true}
             width={"60vw"}
+            okText="Cập nhật"
         >
             <Tabs
                 defaultActiveKey="info"

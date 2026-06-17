@@ -1,6 +1,6 @@
 import { useCurrentApp } from "@/components/context/app.context";
 import { updateUserPasswordAPI } from "@/services/api";
-import { App, Col, Form, FormProps, Input, Row } from "antd";
+import { App, Button, Col, Form, FormProps, Input, Row } from "antd";
 import { useEffect, useState } from "react";
 
 type FieldType = {
@@ -65,6 +65,21 @@ const ChangePassword = () => {
                             rules={[{ required: true, message: "Mật khẩu không đúng định dạng!" }]}
                         >
                             <Input.Password />
+                        </Form.Item>
+
+                        <Form.Item<FieldType>
+                            labelCol={{ span: 24 }}
+                            label="Mật khẩu mới"
+                            name="newpass"
+                            rules={[{ required: true, message: "Mật khẩu không đúng định dạng!" }]}
+                        >
+                            <Input.Password />
+                        </Form.Item>
+
+                        <Form.Item label={null}>
+                            <Button type="primary" htmlType="submit" loading={isSubmit}>
+                                Xác nhận
+                            </Button>
                         </Form.Item>
                     </Form>
                 </Col>

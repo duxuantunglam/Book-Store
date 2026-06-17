@@ -147,6 +147,21 @@ const UserInfo = () => {
                         >
                             <Input />
                         </Form.Item>
+
+                        <Form.Item<FieldType>
+                            labelCol={{ span: 24 }}
+                            label="Số điện thoại"
+                            name="phone"
+                            rules={[{ required: true, message: "Vui lòng nhập số điện thoại!" }]}
+                        >
+                            <Input />
+                        </Form.Item>
+
+                        <Form.Item label={null}>
+                            <Button type="primary" htmlType="submit" loading={isSubmit}>
+                                Cập nhật
+                            </Button>
+                        </Form.Item>
                     </Form>
                 </Col>
             </Row>
