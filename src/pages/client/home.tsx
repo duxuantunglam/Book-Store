@@ -3,7 +3,7 @@ import { getBooksAPI, getCategoryAPI } from "@/services/api";
 import { FilterTwoTone, ReloadOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Col, Divider, Form, FormProps, InputNumber, Pagination, Rate, Row, Spin, Tabs } from "antd";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import 'styles/book.scss';
 
 type FieldType = {
@@ -16,6 +16,8 @@ type FieldType = {
 
 const HomePage = () => {
     const navigate = useNavigate();
+
+    const [searchTerm] = useOutletContext() as any;
 
     const [listCategory, setListCategory] = useState<{ label: string, value: string }[]>([]);
     const [listBook, setListBook] = useState<IBookTable[]>([]);
@@ -47,7 +49,7 @@ const HomePage = () => {
 
     useEffect(() => {
         fetchBook();
-    }, [current, pageSize, filter, sortQuery]);
+    }, [current, pageSize, filter, sortQuery, searchTerm]);
 
     const fetchBook = async () => {
         setIsLoading(true);
@@ -57,6 +59,9 @@ const HomePage = () => {
         }
         if (sortQuery) {
             query += `&${sortQuery}`;
+        }
+        if (searchTerm) {
+            query += `&mainText=/${searchTerm}/i`;
         }
 
         const res = await getBooksAPI(query);

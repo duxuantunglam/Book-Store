@@ -6,6 +6,7 @@ import ModalGallery from "./modal.gallery";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import { BsCartPlus } from "react-icons/bs";
 import { useCurrentApp } from "@/components/context/app.context";
+import { useNavigate } from "react-router-dom";
 
 interface IProps {
     currentBook: IBookTable | null;
@@ -14,6 +15,10 @@ interface IProps {
 type UserAction = "MINUS" | "PLUS";
 
 const BookDetail = (props: IProps) => {
+    const navigate = useNavigate();
+
+    const { setCarts, user } = useCurrentApp();
+
     const { message } = App.useApp();
 
     const { currentBook } = props;
@@ -30,8 +35,6 @@ const BookDetail = (props: IProps) => {
     const [currentQuantity, setCurrentQuantity] = useState<number>(1);
 
     const refGallery = useRef<ImageGallery>(null);
-
-    const { carts, setCarts } = useCurrentApp();
 
     useEffect(() => {
         if (currentBook) {
@@ -82,7 +85,12 @@ const BookDetail = (props: IProps) => {
         }
     };
 
-    const handleAddToCart = () => {
+    const handleAddToCart = (isBuyNow = false) => {
+        if (!user) {
+            message.error("Vui lòng đăng nhập để thực hiện tính năng này!");
+            return;
+        }
+
         const cartStorage = localStorage.getItem("carts");
         if (cartStorage && currentBook) {
             const carts = JSON.parse(cartStorage) as ICart[];
@@ -111,9 +119,13 @@ const BookDetail = (props: IProps) => {
 
             setCarts(data);
         }
-    };
 
-    console.log(carts);
+        if (isBuyNow) {
+            navigate("/order");
+        } else {
+            message.success("Thêm sản phẩm vào giỏ hàng thành công!");
+        }
+    };
 
     return (
         <div className="view-detail-book" style={{ maxWidth: 1440, margin: "0 auto", padding: "0 20px" }}>
@@ -184,7 +196,12 @@ const BookDetail = (props: IProps) => {
                                     <BsCartPlus className="icon-cart" />
                                     <span>Thêm vào giỏ hàng</span>
                                 </button>
-                                <button className='now'>Mua ngay</button>
+                                <button
+                                    className='now'
+                                    onClick={() => handleAddToCart(true)}
+                                >
+                                    Mua ngay
+                                </button>
                             </div>
                         </Col>
                     </Col>
