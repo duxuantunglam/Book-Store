@@ -2,7 +2,7 @@ import { App, Col, Divider, Rate, Row } from "antd";
 import { useEffect, useRef, useState } from "react";
 import ImageGallery from "react-image-gallery";
 import "styles/book.scss";
-import ModalGallery from "./modal.gallery";
+import ModalGallery from "components/client/book/modal.gallery";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import { BsCartPlus } from "react-icons/bs";
 import { useCurrentApp } from "@/components/context/app.context";
